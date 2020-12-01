@@ -10,6 +10,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     testImplementation("junit:junit:4.12")
+    implementation ("org.apache.commons:commons-math3:3.6.1")
 }
 
 tasks.withType<Wrapper> {
