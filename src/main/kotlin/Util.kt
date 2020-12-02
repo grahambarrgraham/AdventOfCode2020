@@ -1,10 +1,11 @@
 object Util {
 
-    fun loadIntList(filename: String): List<Int> =
+    fun loadStringList(filename: String): List<String> =
             javaClass.getResource(filename)
                     .readText()
                     .lines()
                     .map(String::trim)
                     .filterNot(String::isEmpty)
-                    .map(String::toInt)
+
+    fun loadIntList(filename: String): List<Int> = loadStringList(filename).map(String::toInt)
 }

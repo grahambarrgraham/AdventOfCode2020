@@ -23,15 +23,7 @@ object Day1 {
         return loop(0)
     }
 
-    fun part1V2(target: Int, values: List<Int>): Int =
-            values.cartesianProduct(values).find { it.first + it.second == target }?.let { it.first * it.second }
-                    ?: throw RuntimeException("Not found")
-
-    fun <S, T> List<S>.cartesianProduct(other: List<T>) = this.flatMap {
-        List(other.size) { i -> Pair(it, other[i]) }
-    }
-
-    fun part1V3(target: Int, values: List<Int>): Int = calc(values, 2, target)
+    fun part1V2(target: Int, values: List<Int>): Int = calc(values, 2, target)
 
     fun part2(target: Int, values: List<Int>): Int = calc(values, 3, target)
 
