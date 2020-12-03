@@ -12,8 +12,8 @@ object Day1 {
     private fun calc(values: List<Int>, tupleSize: Int, target: Int): Int {
         return CombinatoricsUtils.combinationsIterator(values.size, tupleSize)
                 .asSequence()
-                .map { it -> it.map { it2 -> values[it2] } }
-                .find { it -> it.sum() == target }
+                .map { it.map { it2 -> values[it2] } }
+                .find { it.sum() == target }
                 ?.let { it -> it.fold(1) { a, b -> a * b } }
                 ?: throw RuntimeException("Not found")
     }
