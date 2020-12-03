@@ -7,17 +7,12 @@ class Day1Test {
 
     @Test
     fun part1_simple() {
-        assertThat(Day1.part1V1(2020, listOf(1721, 232, 299, 1232, 434, 4341, 1)), `is`(514579))
+        assertThat(Day1.part1(2020, listOf(1721, 232, 299, 1232, 434, 4341, 1)), `is`(514579))
     }
 
     @Test
-    fun part1_v1() {
-        assertThat(Day1.part1V1(2020, loadIntList("/day1_data.txt")), `is`(1018944))
-    }
-
-    @Test
-    fun part1_v2() {
-        assertThat(Day1.part1V2(2020, loadIntList("/day1_data.txt")), `is`(1018944))
+    fun part1() {
+        assertThat(Day1.part1(2020, loadIntList("/day1_data.txt")), `is`(1018944))
     }
 
     @Test

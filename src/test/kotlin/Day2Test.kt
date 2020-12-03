@@ -1,7 +1,6 @@
-import Util.loadIntList
 import Util.loadStringList
 import org.hamcrest.CoreMatchers.`is`
-import org.junit.Assert.*
+import org.junit.Assert.assertThat
 import org.junit.Test
 
 class Day2Test {

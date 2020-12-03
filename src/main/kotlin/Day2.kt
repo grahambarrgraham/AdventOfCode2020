@@ -11,8 +11,7 @@ object Day2 {
     private val pattern = Regex("(\\d+)-(\\d+) (.): (.+)")
 
     private fun String.parse(): Data {
-        val a = pattern.find(this)!!
-        val (min, max, letter, pw) = a.destructured
+        val (min, max, letter, pw) = pattern.find(this)!!.destructured
         return Data(min.toInt(), max.toInt(), letter[0], pw)
     }
 
