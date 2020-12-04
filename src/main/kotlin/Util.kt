@@ -12,4 +12,15 @@ object Util {
     }
 
     fun loadIntList(filename: String): List<Int> = loadStringListWithoutBlanks(filename).map(String::toInt)
+
+    fun splitByBlankLine(strings: List<String>): Sequence<List<String>> = sequence {
+
+        var i = 0;
+
+        while (i < strings.size) {
+            val list = strings.subList(i, strings.size).takeWhile { it.isNotBlank() }
+            yield(list)
+            i += list.size + 1
+        }
+    }
 }
