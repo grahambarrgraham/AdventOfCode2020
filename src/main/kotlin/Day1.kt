@@ -5,9 +5,9 @@ import org.apache.commons.math3.util.CombinatoricsUtils
  */
 object Day1 {
 
-    fun part1(target: Int, values: List<Int>): Int = calc(values, 2, target)
+    fun part1(values: List<Int>): Int = calc(values, 2, 2020)
 
-    fun part2(target: Int, values: List<Int>): Int = calc(values, 3, target)
+    fun part2(values: List<Int>): Int = calc(values, 3, 2020)
 
     private fun calc(values: List<Int>, tupleSize: Int, target: Int): Int {
         return CombinatoricsUtils.combinationsIterator(values.size, tupleSize)

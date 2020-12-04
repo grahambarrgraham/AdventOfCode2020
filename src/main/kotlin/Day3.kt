@@ -3,10 +3,10 @@
  */
 object Day3 {
 
-    class Map(private val map: List<String>) {
-        private val width = map[0].length
-        private var currentX = 0;
-        private var currentY = 0;
+    class Map(val map: List<String>) {
+        val width = map[0].length
+        var currentX = 0
+        var currentY = 0
 
         fun isFinished() = currentY >= map.size
 
@@ -30,14 +30,14 @@ object Day3 {
 
     fun calc(strings: List<String>, right: Int, down: Int): Int {
         val map = Map(strings)
-        var count = 0;
+        var count = 0
 
         while (!map.isFinished()) {
-            if (map.isTreeHere()) count++;
+            if (map.isTreeHere()) count++
             map.next(right, down)
         }
 
-        return count;
+        return count
     }
 
 

@@ -1,4 +1,4 @@
-import Util.loadStringList
+import Util.loadStringListWithoutBlanks
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.assertThat
 import org.junit.Test
@@ -12,7 +12,7 @@ class Day2Test {
 
     @Test
     fun part1() {
-        assertThat(Day2.part1(loadStringList("/day2_data.txt")), `is`(519))
+        assertThat(Day2.part1(loadStringListWithoutBlanks("/day2_data.txt")), `is`(519))
     }
 
     @Test
@@ -24,7 +24,7 @@ class Day2Test {
 
     @Test
     fun part2() {
-        assertThat(Day2.part2(loadStringList("/day2_data.txt")), `is`(708))
+        assertThat(Day2.part2(loadStringListWithoutBlanks("/day2_data.txt")), `is`(708))
     }
 
 
