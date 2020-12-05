@@ -1,32 +1,33 @@
 /**
- * https://adventofcode.com/2020/day/n
+ * https://adventofcode.com/2020/day/5
  */
 object Day5 {
 
-    fun part1(strings: List<String>): Int = strings.map(this::score).max()!!
+    fun part1(strings: List<String>): Int = strings.map(this::seatNumber).max()!!
 
-    fun part2(strings: List<String>): Int  {
+    fun part2(strings: List<String>): Int {
 
-        val manifest = strings.map(this::score).sorted()
+        val manifest = strings.map(this::seatNumber).sorted()
 
         return manifest
-                .filterIndexed { index, i -> findGap(index, manifest, i) }
+                .filterIndexed { index, i -> nextSeatIsVacant(index, manifest, i) }
                 .map { it + 1 }
                 .first()
-
     }
 
-    private fun findGap(index: Int, sorted: List<Int>, i: Int) =
-            index + 1 < sorted.size && sorted[index + 1] - i > 1
+    private fun nextSeatIsVacant(index: Int, manifest: List<Int>, seatNumber: Int) =
+            index + 1 < manifest.size && manifest[index + 1] - seatNumber > 1
 
-    fun score(s: String): Int {
+    private fun seatNumber(s: String): Int {
         val (rowS, colS) = s.partition { it == 'B' || it == 'F' }
-        val row = getInt(rowS, 'B')
-        val col = getInt(colS, 'R')
+        val row = int(rowS, binary('B'))
+        val col = int(colS, binary('R'))
         return (row * 8) + col;
     }
 
-    private fun getInt(rowS: String, upper: Char) =
-            String(rowS.map { if (it == upper) '1' else '0' }.toCharArray()).toInt(2)
+    private fun int(rowS: String, transform: (Char) -> Char): Int =
+            String(rowS.map(transform).toCharArray()).toInt(2)
+
+    private fun binary(upper: Char): (Char) -> Char = { if (it == upper) '1' else '0' }
 
 }
