@@ -43,7 +43,7 @@ object Day7 {
 
     fun String.toBag(): Bag? {
         if ("no other bags" == this) return null
-        val (numS, name, ss) = childPattern.find(this)!!.destructured
+        val (numS, name, _) = childPattern.find(this)!!.destructured
         return Bag(name, numS.toInt())
     }
 

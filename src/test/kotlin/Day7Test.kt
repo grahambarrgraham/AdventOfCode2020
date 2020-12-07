@@ -27,7 +27,7 @@ class Day7Test {
 
     @Test
     fun part2() {
-        assertThat(Day7.part2(loadStringListWithoutBlanks("/day7_data.txt")), `is`(-1))
+        assertThat(Day7.part2(loadStringListWithoutBlanks("/day7_data.txt")), `is`(7867))
     }
 
 }
