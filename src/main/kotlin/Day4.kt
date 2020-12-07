@@ -5,7 +5,11 @@ import Util.splitByBlankLine
  */
 object Day4 {
 
-    data class Passport(val codes: Map<String, String>) {
+    fun part1(strings: List<String>) = read(strings).filter { it.isValidPart1() }.count()
+
+    fun part2(strings: List<String>) = read(strings).filter { it.isValidPart2() }.count()
+
+    private data class Passport(val codes: Map<String, String>) {
 
         fun isValidPart1() = listOf("byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid")
                 .map { codes.containsKey(it) }
@@ -25,13 +29,9 @@ object Day4 {
         fun match(regexp: String, key: String) = regexp.toRegex().matches(codes[key]!!)
     }
 
-    fun part1(strings: List<String>) = read(strings).filter { it.isValidPart1() }.count()
+    private fun read(strings: List<String>) = splitByBlankLine(strings).map { Passport(codes(it)) }.toList()
 
-    fun part2(strings: List<String>) = read(strings).filter { it.isValidPart2() }.count()
-
-    fun read(strings: List<String>) = splitByBlankLine(strings).map { Passport(codes(it)) }.toList()
-
-    fun codes(lines: List<String>) =
+    private fun codes(lines: List<String>) =
             lines
                     .flatMap { it.split("\\s+".toRegex()) }
                     .associate { val kv = it.split(":"); kv[0] to kv[1] }

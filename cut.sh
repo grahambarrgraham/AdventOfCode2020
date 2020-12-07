@@ -12,8 +12,6 @@ touch "src/main/resources/day$1_simple.txt"
 echo "creating : src/main/resources/day$1_data.txt"
 touch "src/main/resources/day$1_data.txt"
 
-#pull input https://adventofcode.com/2020/day/5/input and write to file txt
-
 SESSION_ID='53616c7465645f5f82d5d392ee431e91543f61e56db88a265f340ec63b91a3139eb0649c94ca2ec0ec4b1ce8b0f5db24'
 
 echo "loading from : https://adventofcode.com/2020/day/$1/input to src/main/resources/day$1_data.txt"

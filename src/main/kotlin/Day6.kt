@@ -16,9 +16,10 @@ object Day6 {
             .filter { it }
             .count()
 
-    private fun allAnsweredQuestions(l: List<String>) =
+    private fun allAnsweredQuestions(l: List<String>): Set<Char> =
             l.flatMap { it.toCharArray().toSet() }.toSet()
 
-    private fun wasAnsweredByEachPerson(l: List<String>, it: Char) =
-            l.map { it2 -> it2.contains(it) }.fold(true) { a, b -> a && b }
+    private fun wasAnsweredByEachPerson(l: List<String>, question: Char): Boolean =
+            l.map { it.contains(question) }
+                    .fold(true) { a, b -> a && b }
 }

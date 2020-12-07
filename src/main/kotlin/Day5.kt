@@ -15,8 +15,9 @@ object Day5 {
                 .first()
     }
 
-    private fun nextSeatIsVacant(index: Int, manifest: List<Int>, seatNumber: Int) =
-            index + 1 < manifest.size && manifest[index + 1] - seatNumber > 1
+    private fun nextSeatIsVacant(index: Int, manifest: List<Int>, seatNumber: Int): Boolean =
+            index + 1 < manifest.size
+                    && manifest[index + 1] - seatNumber > 1
 
     private fun seatNumber(s: String): Int {
         val (rowS, colS) = s.partition { it == 'B' || it == 'F' }
