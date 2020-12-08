@@ -5,29 +5,33 @@ import java.util.*
  */
 object Day8 {
 
-    data class Instruction(val type: String, val value: Int, val id: UUID = UUID.randomUUID())
-
     fun part1(strings: List<String>): Int =
-            loop(parse(strings)).acc
+            execute(parse(strings)).acc
 
     fun part2(strings: List<String>): Int =
             mutations(parse(strings))
-                    .map { loop(it) }
+                    .map { execute(it) }
                     .first { it.idx == it.size }.acc
+
+    private data class Instruction(val type: String, val value: Int, val id: UUID = UUID.randomUUID())
+
+    private data class Result(val idx: Int, val acc: Int, val size: Int)
 
     private fun mutations(instructions: List<Instruction>): Sequence<List<Instruction>> =
             sequence {
-                yield(instructions)
-                instructions.forEachIndexed { index,
-                                              instruction ->
-                    if (instruction.type == "nop" && instruction.value != 0) {
-                        yield(mutate(index, Instruction("jmp", instruction.value), instructions))
-                    }
-                    if (instruction.type == "jmp" && instruction.value != 0) {
-                        yield(mutate(index, Instruction("nop", instruction.value), instructions))
-                    }
-                }
+                instructions
+                        .forEachIndexed { index, instruction ->
+                            when {
+                                instruction.isOp("nop") ->
+                                    yield(mutate(index, Instruction("jmp", instruction.value), instructions))
+
+                                instruction.isOp("jmp") ->
+                                    yield(mutate(index, Instruction("nop", instruction.value), instructions))
+                            }
+                        }
             }
+
+    private fun Instruction.isOp(s: String) = type == s && value != 0
 
     private fun mutate(idx: Int, instruction: Instruction, instructions: List<Instruction>): List<Instruction> {
         val mutableListOf = instructions.toMutableList()
@@ -35,9 +39,7 @@ object Day8 {
         return mutableListOf
     }
 
-    data class Result(val idx: Int, val acc: Int, val size: Int)
-
-    private fun loop(instructions: List<Instruction>): Result {
+    private fun execute(instructions: List<Instruction>): Result {
         var acc = 0
         var idx = 0
         val visited: MutableSet<Instruction> = mutableSetOf()
@@ -64,9 +66,7 @@ object Day8 {
         return Result(idx, acc, instructions.size)
     }
 
-    private fun parse(strings: List<String>): List<Instruction> {
-        return strings.map { it.parse() }
-    }
+    private fun parse(strings: List<String>): List<Instruction> = strings.map { it.parse() }
 
     private fun String.parse(): Instruction {
         val split = this.split("\\s+".toRegex())
