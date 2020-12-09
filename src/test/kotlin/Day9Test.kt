@@ -22,7 +22,7 @@ class Day9Test {
 
     @Test
     fun part2() {
-        assertThat(Day9.part2(loadLongList("/day9_data.txt"), 31161678L), `is`(-1L))
+        assertThat(Day9.part2(loadLongList("/day9_data.txt"), 31161678L), `is`(5453868L))
     }
 
 }
