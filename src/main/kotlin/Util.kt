@@ -13,6 +13,8 @@ object Util {
 
     fun loadIntList(filename: String): List<Int> = loadStringListWithoutBlanks(filename).map(String::toInt)
 
+    fun loadLongList(filename: String): List<Long> = loadStringListWithoutBlanks(filename).map(String::toLong)
+
     fun splitByBlankLine(strings: List<String>): Sequence<List<String>> = sequence {
 
         var i = 0;
