@@ -32,4 +32,38 @@ object Day10 {
         return counts[values.max()!!]!!
     }
 
+    fun part2Version1(values: List<Int>): Long {
+
+        var p = values.toMutableList()
+        p.add(0)
+        p.add(values.max()!! + 3)
+
+        val l = p.toList().sortedDescending()
+
+        val pre = l.map {v ->
+            Pair(v, l.filter { it -> (v - it) in 1..3 })
+        }.associate { it.first to it.second }
+
+        val c = findCountsTo(l.first(), mutableMapOf(), pre)
+
+        return c
+    }
+
+    fun findCountsTo(target: Int, memo: MutableMap<Int, Long>, prior: Map<Int, List<Int>>) : Long {
+
+        if (target == 0) {
+            return 1
+        }
+
+        if (memo.containsKey(target)) {
+            return memo[target]!!
+        }
+
+        val count = prior[target]?.map { findCountsTo(it, memo, prior) }?.sum() ?: 1
+        memo[target] = count
+
+        return count
+    }
+
+
 }

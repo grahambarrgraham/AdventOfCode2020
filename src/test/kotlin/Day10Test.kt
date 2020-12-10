@@ -25,11 +25,13 @@ class Day10Test {
         assertThat(Day10.part2(listOf(1, 2, 3, 4)), `is`(7L))
         assertThat(Day10.part2(loadIntList("/day10_simple2.txt")), `is`(8L))
         assertThat(Day10.part2(loadIntList("/day10_simple.txt")), `is`(19208L))
+        assertThat(Day10.part2Version1(loadIntList("/day10_data.txt")), `is`(28346956187648L))
     }
 
     @Test
     fun part2() {
         assertThat(Day10.part2(loadIntList("/day10_data.txt")), `is`(28346956187648L))
+        assertThat(Day10.part2Version1(loadIntList("/day10_data.txt")), `is`(28346956187648L))
     }
 
 }
