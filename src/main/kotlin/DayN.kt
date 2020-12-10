@@ -3,8 +3,8 @@
  */
 object DayN {
 
-    fun part1(strings: List<String>): Int = 0
+    fun part1(strings: List<String>): Long = 0
 
-    fun part2(strings: List<String>): Int = 0
+    fun part2(strings: List<String>): Long = 0
 
 }

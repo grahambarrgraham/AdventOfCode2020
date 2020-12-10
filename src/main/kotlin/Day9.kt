@@ -9,8 +9,12 @@ object Day9 {
             generate(values, preableSize)
                     .find { !it.validatePart1(2) }!!.target
 
-    fun part2(values: List<Long>, target: Long): Long {
-        val l = Check(values, target).validSublistForPart2().sorted()
+    fun part2(values: List<Long>, preableSize: Int): Long {
+
+        val l = Check(values, part1(values, preableSize))
+                .validSublistForPart2()
+                .sorted()
+
         return l.first() + l.last()
     }
 
