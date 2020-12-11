@@ -13,43 +13,39 @@ object Day10 {
         return (map[1]!!.count() + 1) * map[3]!!.count()
     }
 
-    fun part2(values: List<Int>): Long {
+    fun part2Version2(values: List<Int>): Long {
 
-        var p = values.toMutableList()
-        p.add(0)
-        p.add(values.max()!! + 3)
-
-        val l = p.sorted()
+        val l = addEndpoints(values).sorted()
 
         val counts = mutableMapOf<Int, Long>().withDefault { 0L };
         counts[0] = 1L
 
-        l.forEach {
-            if (it > 0)
-                counts[it] = (counts[it -3]?:0) + (counts[it - 2]?:0) + (counts[it -1]?:0)
+        l.drop(1).forEach {
+            val i = 3
+            counts[it] = (counts[it - i] ?: 0) + (counts[it - 2] ?: 0) + (counts[it - 1] ?: 0)
         }
 
         return counts[values.max()!!]!!
     }
 
     fun part2Version1(values: List<Int>): Long {
+        val l = addEndpoints(values).toList().sortedDescending()
+        return generateCounts(l.first(), mutableMapOf(), createTree(l))
+    }
 
+    private fun createTree(l: List<Int>): Map<Int, List<Int>> = l
+            .map { v -> Pair(v, l.filter { it -> (v - it) in 1..3 }) }
+            .associate { it.first to it.second }
+
+
+    private fun addEndpoints(values: List<Int>): MutableList<Int> {
         var p = values.toMutableList()
         p.add(0)
         p.add(values.max()!! + 3)
-
-        val l = p.toList().sortedDescending()
-
-        val pre = l.map {v ->
-            Pair(v, l.filter { it -> (v - it) in 1..3 })
-        }.associate { it.first to it.second }
-
-        val c = findCountsTo(l.first(), mutableMapOf(), pre)
-
-        return c
+        return p
     }
 
-    fun findCountsTo(target: Int, memo: MutableMap<Int, Long>, prior: Map<Int, List<Int>>) : Long {
+    fun generateCounts(target: Int, memo: MutableMap<Int, Long>, prior: Map<Int, List<Int>>): Long {
 
         if (target == 0) {
             return 1
@@ -59,10 +55,9 @@ object Day10 {
             return memo[target]!!
         }
 
-        val count = prior[target]?.map { findCountsTo(it, memo, prior) }?.sum() ?: 1
-        memo[target] = count
+        memo[target] = prior[target]?.map { generateCounts(it, memo, prior) }?.sum() ?: 1
 
-        return count
+        return memo[target]!!
     }
 
 
