@@ -33,7 +33,7 @@ object Day11 {
             else -> '.'
         }
 
-        fun seatState(coord: Coord): Char = if (isValid(coord)) map[coord.y][coord.x] else '.'
+        fun seatState(coord: Coord): Char = if (isOnGrid(coord)) map[coord.y][coord.x] else '.'
 
         fun adjacentOccupiedSeats(coord: Coord) = neighbours.map { it(coord) }.filter { seatState(it) == '#' }
 
@@ -42,14 +42,14 @@ object Day11 {
         private fun existsVisibleOccupiedSeat(start: Coord, next: (Coord) -> Coord): Coord? {
             val nextCoord = next(start)
             return when {
-                !isValid(nextCoord) -> null
+                !isOnGrid(nextCoord) -> null
                 seatState(nextCoord) == 'L' -> null
                 seatState(nextCoord) == '#' -> nextCoord
                 else -> existsVisibleOccupiedSeat(nextCoord, next)
             }
         }
 
-        private fun isValid(coord: Coord) = coord.x in map[0].indices && coord.y in map.indices
+        private fun isOnGrid(coord: Coord) = coord.x in map[0].indices && coord.y in map.indices
 
         fun evolveMap(transform: (Coord, SeatingMap) -> Char): SeatingMap =
                 SeatingMap(map.mapIndexed { y, it -> evolveRow(it, y, transform) })
