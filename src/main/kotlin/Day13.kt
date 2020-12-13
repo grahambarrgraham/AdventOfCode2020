@@ -9,12 +9,10 @@ object Day13 {
 
         val x = strings[1]
                 .split(',')
-                .asSequence()
                 .filterNot { it == "x" }
                 .map(String::toInt)
                 .map { Pair(it, target - (target % it) + it) }
-                .sortedBy { it.second }
-                .first()
+                .minBy { it.second }!!
 
         return x.first * (x.second - target).toLong()
     }
