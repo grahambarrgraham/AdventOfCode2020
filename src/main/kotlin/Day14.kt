@@ -15,7 +15,7 @@ object Day14 {
         loadInstructions(strings)
                 .forEach { instruction ->
                     instruction.data.forEach { data ->
-                        memory[data.key] = applyMaskPart(
+                        memory[data.key] = applyMask(
                                 instruction.mask,
                                 binaryString(data.value.toInt(), 36),
                                 this::applyMaskPart1)
@@ -35,14 +35,14 @@ object Day14 {
         loadInstructions(strings)
                 .flatMap { instruction ->
                     instruction.data.map {
-                        Store(expandMask(applyMaskPart(
+                        Store(expandMask(applyMask(
                                 instruction.mask,
                                 binaryString(it.key, 36),
                                 this::applyMaskPart2)),
                                 it.value)
                     }
-                }.forEach { pair ->
-                    pair.addresses.forEach { memory[it] = pair.value }
+                }.forEach { store ->
+                    store.addresses.forEach { memory[it] = store.value }
                 }
 
         return memory.values.sum()
@@ -50,7 +50,7 @@ object Day14 {
 
     data class Instruction(val data: Map<Int, Long>, val mask: String)
 
-    fun applyMaskPart(mask: String, input: String, convert: (Char, Char) -> Char): String =
+    fun applyMask(mask: String, input: String, convert: (Char, Char) -> Char): String =
             String(input.toCharArray().mapIndexed { i, _ -> convert(mask[i], input[i]) }.toCharArray())
 
     private fun applyMaskPart1(maskChar: Char, valChar: Char): Char =
@@ -80,6 +80,7 @@ object Day14 {
             yield(result)
         }
     }
+
     private fun binaryString(it1: Int, length: Int) = Integer.toBinaryString(it1).padStart(length, '0')
 
     private fun loadInstructions(strings: List<String>) =

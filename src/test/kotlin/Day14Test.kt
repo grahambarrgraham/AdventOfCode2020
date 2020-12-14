@@ -1,4 +1,4 @@
-import Day14.applyMaskPart
+import Day14.applyMask
 import Util.loadStringListWithoutBlanks
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.assertThat
@@ -28,10 +28,10 @@ class Day14Test {
 
     @Test
     fun applyMask() {
-        assertThat(applyMaskPart("000000000000000000000000000000X1001X", "000000000000000000000000000000101010", Day14::applyMaskPart2),
+        assertThat(applyMask("000000000000000000000000000000X1001X", "000000000000000000000000000000101010", Day14::applyMaskPart2),
                 `is`("000000000000000000000000000000X1101X"))
 
-        assertThat(applyMaskPart("00000000000000000000000000000000X0XX", "000000000000000000000000000000011010", Day14::applyMaskPart2),
+        assertThat(applyMask("00000000000000000000000000000000X0XX", "000000000000000000000000000000011010", Day14::applyMaskPart2),
                 `is`("00000000000000000000000000000001X0XX"))
     }
 
