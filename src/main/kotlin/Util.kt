@@ -20,7 +20,7 @@ object Util {
         var i = 0;
 
         while (i < strings.size) {
-            val list = strings.subList(i, strings.size).takeWhile { it.isNotBlank() }
+            val list = strings.subList(i, strings.size).takeWhile { it.isNotBlank() && it.isNotEmpty() }
             yield(list)
             i += list.size + 1
         }
