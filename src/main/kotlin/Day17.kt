@@ -1,7 +1,7 @@
 import kotlin.math.pow
 
 /**
- * https://adventofcode.com/2020/day/16
+ * https://adventofcode.com/2020/day/17
  */
 object Day17 {
 
@@ -31,8 +31,8 @@ object Day17 {
 
     private data class ConwayCube(val points: Set<Coord>) {
 
-        fun eval(dim: Int): ConwayCube =
-                ConwayCube(countNeighbours(points, dim)
+        fun eval(dimensions: Int): ConwayCube =
+                ConwayCube(countNeighbours(points, dimensions)
                         .filter { (p, c) -> (p in points && c in 2..3) || (p !in points && c == 3) }
                         .map { it.key }
                         .toSet())
