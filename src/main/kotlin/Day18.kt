@@ -27,6 +27,8 @@ object Day18 {
 
             var token = tokens.removeAt(0)
 
+            println("token $token values $values ops $ops")
+
             when (token) {
                 "(" -> ops.push(token)
                 ")" -> {
@@ -47,9 +49,17 @@ object Day18 {
             }
         }
 
-        while (!ops.empty()) values.push(applyOp(ops.pop(),
-                values.pop(),
-                values.pop()))
+        println("finishing")
+
+
+        while (!ops.empty()) {
+
+            println("values $values ops $ops")
+
+            values.push(applyOp(ops.pop(),
+                    values.pop(),
+                    values.pop()))
+        }
         return values.pop()
     }
 
@@ -62,6 +72,11 @@ object Day18 {
         "+" -> a + b
         "*" -> a * b
         else -> 0L
+    }
+
+    @JvmStatic
+    fun main(args: Array<String>) {
+        println(part1(listOf("1 + 1 * 2 + 1")))
     }
 
 }
