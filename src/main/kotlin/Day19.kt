@@ -3,6 +3,17 @@
  */
 object Day19 {
 
+    fun eval(strings: List<List<String>>): Long {
+        val candidates = strings[1]
+        val matches = candidates.filter { candidate ->
+            val rules = buildRules(strings)
+            rules["0"]!!
+                    .expansions(candidate, rules.toMutableMap())
+                    .any { it == candidate }
+        }
+        return matches.count().toLong()
+    }
+
     data class Rule(val id: Int, val options: List<List<String>>) {
         private var expansions: List<String>? = null
         private var recursiveDepth = 1;
@@ -38,17 +49,6 @@ object Day19 {
             }
         }
 
-    }
-
-    fun eval(strings: List<List<String>>): Long {
-        val candidates = strings[1]
-        val matches = candidates.filter { candidate ->
-            val rules = buildRules(strings)
-            rules["0"]!!
-                    .expansions(candidate, rules.toMutableMap())
-                    .any { it == candidate }
-        }
-        return matches.count().toLong()
     }
 
     private fun buildRules(strings: List<List<String>>) =
