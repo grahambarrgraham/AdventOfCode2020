@@ -15,7 +15,7 @@ class Day20Test {
 
     @Test
     fun part1() {
-        assertThat(Day20.part1(load("/day20_data.txt")), `is`(0L))
+        assertThat(Day20.part1(load("/day20_data.txt")), `is`(4006801655873L))
     }
 
     @Test
