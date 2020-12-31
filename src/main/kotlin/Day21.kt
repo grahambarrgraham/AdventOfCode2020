@@ -3,66 +3,59 @@
  */
 object Day21 {
 
-    fun part1(strings: List<String>): Long = 0
-
-    fun part2(strings: List<String>): Long = 0
-
-
-    @JvmStatic
-    fun main(args: Array<String>) {
-        val input = Util.loadStringListWithoutBlanks("/day21_simple.txt").map { read(it) }
-        val hypothesis = getStartingHypothetheses(input)
-        println("Input $input")
-        println("Hypothetis $hypothesis")
-        //for each hypothesis, iterate through rules and filter out the impossible
-
-        val v = hypothesis.mapValues {
-            it.value.filter { allergen -> consistentWith(it.key, allergen, input) }
-        }
-
-        println("After : $v")
-
-        val v2 = v.mapValues {
-            it.value.filter { allergen -> consistentWith(it.key, allergen, input) }
-        }
-
-        println("After : $v2")
-
-        //dairy -> one of (trh fvjkl sbzzf mxmxvkd)
-        //diary or fish -> one of (
-
+    fun part1(strings: List<String>): Long {
+        val (allIngredients, allergenMap) = findAllergenicIngredients(strings)
+        val allAllergens = allergenMap.values.flatten()
+        return allIngredients.filterNot { allAllergens.contains(it) }.count().toLong()
     }
 
-    private fun consistentWith(ingredient: String, allergen: String, input: List<Input>): Boolean {
-        return input.fold(true) {acc, input -> acc && consistentWith1(ingredient, allergen, input)}
-    }
+    private fun findAllergenicIngredients(strings: List<String>): Pair<List<String>, MutableMap<String, MutableSet<String>>> {
+        var foods = readFoods(strings).toSet()
+        val allergenMap = emptyMap<String, MutableSet<String>>().toMutableMap()
+        val allergens = foods.flatMap { it.allergens }.toSet()
+        val allIngredients = foods.flatMap { it.ingredients }
 
-    private fun consistentWith1(ingredient: String, allergen: String, input: Input): Boolean {
-        if (input.alg.size == 1 && allergen == input.alg[0] && !input.ing.contains(ingredient))
-            return false
-        return true
-    }
-
-    private fun getStartingHypothetheses(input: List<Input>): MutableMap<String, Set<String>> {
-        val hypothesisList = mutableMapOf<String, Set<String>>()
-
-        for (input in input) {
-            input.ing.forEach {
-                hypothesisList.putIfAbsent(it, emptySet())
-                hypothesisList[it] = hypothesisList[it]!! + input.alg
+        for (allergen in allergens) {
+            for (food in foods) {
+                if (food.allergens.contains(allergen)) {
+                    if (allergenMap.containsKey(allergen)) {
+                        allergenMap[allergen] = allergenMap[allergen]!!.intersect(food.ingredients).toMutableSet()
+                    } else {
+                        allergenMap[allergen] = food.ingredients.toMutableSet()
+                    }
+                }
             }
         }
-        return hypothesisList
+
+        var allergenIdentified = mutableSetOf<String>()
+        while (allergenMap.values.map { it.size }.max()!! > 1) {
+            allergenMap.filter { it.value.size == 1 }.forEach { allergenIdentified.add(it.value.first()) }
+            allergenMap.filter { it.value.size > 1 }.forEach { it.value.removeAll(allergenIdentified) }
+        }
+
+        return Pair(allIngredients, allergenMap)
     }
 
-    private fun read(it: String): Input {
-        var (aS, bS) = "(.+) \\(contains (.+)\\)".toRegex().find(it)!!.destructured
-        return Input(aS.trim().split(' '), bS.trim().split(", "))
+    fun part2(strings: List<String>): String {
+        val allergenMap = findAllergenicIngredients(strings).second
+        return allergenMap
+                .map { Pair(it.key, it.value.first()) }
+                .sortedBy { it.first }
+                .map { it.second }
+                .drop(1)
+                .fold(allergenMap.map { Pair(it.key, it.value.first()) }
+                        .sortedBy { it.first }
+                        .map { it.second }.first()) { acc, s -> "$acc,$s" }
     }
 
-    data class Input(val ing: List<String>, val alg: List<String>)
 
+    data class Food(val ingredients: Set<String>, val allergens: Set<String>)
 
-    //mxmxvkd (diary, fish, any)
-    //kfcds (diary, fish, any)
+    private fun readFoods(strings: List<String>) = strings.map { read(it) }
+
+    private fun read(it: String): Food {
+        val (aS, bS) = "(.+) \\(contains (.+)\\)".toRegex().find(it)!!.destructured
+        return Food(aS.trim().split(' ').toSet(), bS.trim().split(", ").sorted().toSet())
+    }
+
 }

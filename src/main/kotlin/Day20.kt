@@ -13,11 +13,11 @@ object Day20 {
 
         var image: List<String> = arrangeImage(arrangeTiles(strings)!!, loadImages(strings))
 
-        var seahorses = 0
+        var seahorses: Int
         while(true) {
             seahorses = countSeaHorses(image)
             if (seahorses > 0) break
-            image = applyOperations(image, listOf(Op.values()[Random.nextInt(3)]))
+            image = applyTransformations(image, listOf(Transform.values()[Random.nextInt(3)]))
         }
 
         val hashes = image.map { it.count { it == '#' } }.sum()
@@ -51,7 +51,7 @@ object Day20 {
                     arrangeImage(tile.parents.t1, images) + arrangeImage(tile.parents.t2, images)
                 }
 
-        return applyOperations(image, tile.ops)
+        return applyTransformations(image, tile.transforms)
     }
 
     private fun loadImages(strings: List<List<String>>): Map<String, List<String>> =
@@ -99,7 +99,7 @@ object Day20 {
                     .filterNot { done.contains(setOf(tile, it)) }
                     .onEach { done.add(setOf(tile, it)) }
                     .filter { tile.isValidPair(it) }
-                    .map { tile.allValidPairs(it) }
+                    .map { tile.generateNewTiles(it) }
                     .flatMap { dedupe(it) }
         }
     }
@@ -127,15 +127,15 @@ object Day20 {
         fun flipHorizontal() = Corners(topRight, topLeft, bottomLeft, bottomRight)
     }
 
-    enum class Op { Rotate, FlipVertical, FlipHorizontal }
+    enum class Transform { Rotate, FlipVertical, FlipHorizontal }
 
-    fun applyOperations(image: List<String>, list: List<Op>): List<String> {
+    fun applyTransformations(image: List<String>, transforms: List<Transform>): List<String> {
         var result = image
-        list.forEach {
+        transforms.forEach {
             when (it) {
-                Op.FlipVertical -> result = result.reversed()
-                Op.FlipHorizontal -> result = result.map { it.reversed() }
-                Op.Rotate -> result = transpose(result.map { it.toCharArray().toList() }).map { String(it.toCharArray()).reversed() }
+                Transform.FlipVertical -> result = result.reversed()
+                Transform.FlipHorizontal -> result = result.map { it.reversed() }
+                Transform.Rotate -> result = transpose(result.map { it.toCharArray().toList() }).map { String(it.toCharArray()).reversed() }
             }
         }
         return result
@@ -143,7 +143,7 @@ object Day20 {
 
     data class Tile(val top: String, val left: String, val right: String, val bottom:
     String, val corners: Corners, val ids: List<String>, val parents: Parents? = null,
-                    val ops: List<Op> = emptyList()) {
+                    val transforms: List<Transform> = emptyList()) {
 
         private val sideLengths = setOf(left.length, right.length, top.length, right.length)
 
@@ -153,9 +153,9 @@ object Day20 {
             cache = findAllValidTransformations(); cache!!
         } else cache!!
 
-        private fun flipVertical() = Tile(bottom, left.reversed(), right.reversed(), top, corners.flipVertical(), ids, parents, ops + Op.FlipVertical)
-        private fun flipHorizontal() = Tile(top.reversed(), right, left, bottom.reversed(), corners.flipHorizontal(), ids, parents, ops + Op.FlipHorizontal)
-        private fun r1() = Tile(left.reversed(), bottom, top, right.reversed(), corners.r1(), ids, parents, ops + Op.Rotate)
+        private fun flipVertical() = Tile(bottom, left.reversed(), right.reversed(), top, corners.flipVertical(), ids, parents, transforms + Transform.FlipVertical)
+        private fun flipHorizontal() = Tile(top.reversed(), right, left, bottom.reversed(), corners.flipHorizontal(), ids, parents, transforms + Transform.FlipHorizontal)
+        private fun r1() = Tile(left.reversed(), bottom, top, right.reversed(), corners.r1(), ids, parents, transforms + Transform.Rotate)
 
         private fun findAllValidTransformations(): Set<Tile> = rotations(flipHorizontal()) + rotations(flipVertical()) + rotations(this)
 
@@ -165,7 +165,7 @@ object Day20 {
                 (sideLengths.intersect(t.sideLengths).isNotEmpty()) && (ids.intersect(t.ids).isEmpty())
 
         //this performs more comparisons that is necessary (a max of 32 are required), so a dedupe is required
-        fun allValidPairs(t: Tile): List<Tile> =
+        fun generateNewTiles(t: Tile): List<Tile> =
                 transformations().flatMap { it1 ->
                     t.transformations().mapNotNull { it2 -> topBottom(it2, it1) }
                 }
